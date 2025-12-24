@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Sayt - 3s Kirish Effekti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+    --primary: #YANGI_RANG;  /* Asosiy rang */
+    --secondary: #YANGI_RANG; /* Ikkilamchi rang */
+    --accent: #YANGI_RANG;    /* Aksent rang */
+}
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A44C6;
+            --accent: #FF6584;
+            --dark: #1A1A2E;
+            --light: #F8F9FF;
+            --gradient: linear-gradient(135deg, #6C63FF 0%, #4A44C6 100%);
+            --gradient-accent: linear-gradient(135deg, #FF6584 0%, #FF3366 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+        
+        /* Preloader - 3 sekundlik kirish effekti */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .loader-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        .loader-circle:nth-child(2) {
+            border-top-color: var(--accent);
+            animation: spin 1.5s linear infinite;
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+        }
+        
+        .loader-circle:nth-child(3) {
+            border-top-color: #fff;
+            animation: spin 2s linear infinite;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+        }
+        
+        .preloader-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+        
+        .preloader-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 3s ease;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Smooth page reveal animation */
+        .page-content {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: pageReveal 1.2s ease 3.2s forwards;
+        }
+        
+        @keyframes pageReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.4s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 40px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 17px;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 200px 0 150px;
+            background: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 800px;
+            height: 800px;
+            background: var(--gradient);
+            opacity: 0.03;
+            border-radius: 50%;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -300px;
+            left: -300px;
+            width: 900px;
+            height: 900px;
+            background: var(--gradient-accent);
+            opacity: 0.03;
+            border-radius: 50%;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 3.5s forwards;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 3.7s forwards;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 3.9s forwards;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--gradient-accent);
+            transition: width 0.5s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(108, 99, 255, 0.4);
+        }
+        
+        .btn i {
+            margin-left: 10px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+        
+        .hero-stats {
+            display: flex;
+            margin-top: 80px;
+            gap: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 4.1s forwards;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            font-size: 18px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        /* Floating elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: var(--gradient);
+            border-radius: 20px;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-element:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 15%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            right: 20%;
+            animation-delay: 1s;
+            background: var(--gradient-accent);
+        }
+        
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 10%;
+            animation-delay: 2s;
+            border-radius: 50%;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        /* Features */
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-title h2 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-title p {
+            font-size: 20px;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            padding: 120px 0;
+            background: white;
+            position: relative;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+            transition: height 0.4s ease;
+            z-index: -1;
+        }
+        
+        .feature-card:hover::before {
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 70px rgba(108, 99, 255, 0.15);
+        }
+        
+        .feature-card:hover .feature-icon,
+        .feature-card:hover h3,
+        .feature-card:hover p {
+            color: white;
+        }
+        
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 40px;
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: white;
+            color: var(--primary);
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .feature-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            transition: color 0.4s ease;
+        }
+        
+        .feature-card p {
+            color: #666;
+            transition: color 0.4s ease;
+        }
+        
+        /* Portfolio */
+        .portfolio {
+            padding: 120px 0;
+            background: var(--light);
+            position: relative;
+        }
+        
+        .portfolio-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        
+        .filter-btn {
+            padding: 12px 30px;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        
+        .portfolio-item {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .portfolio-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+        }
+        
+        .portfolio-img {
+            height: 280px;
+            width: 100%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .portfolio-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .portfolio-item:hover .portfolio-img::after {
+            opacity: 1;
+        }
+        
+        .portfolio-content {
+            padding: 30px;
+        }
+        
+        .portfolio-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        /* Contact */
+        .contact {
+            padding: 120px 0;
+            background: white;
+        }
+        
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .contact-details h4 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .contact-form {
+            background: var(--light);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 180px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 100px 0 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 70px;
+        }
+        
+        .footer-logo {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo i {
+            margin-right: 15px;
+        }
+        
+        .footer-about p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 25px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--gradient);
+            transform: translateY(-5px);
+        }
+        
+        .footer-links h3, .footer-contact h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-links h3::after, .footer-contact h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 10px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(10px);
+        }
+        
+        .footer-links a i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .footer-contact p {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .footer-contact i {
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 20px;
+            width: 30px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 15px;
+        }
+        
+        /* Animations for scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 56px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .hero-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 30px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                z-index: 999;
+                border-radius: 0 0 25px 25px;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 180px 0 100px;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 42px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .section-title h2 {
+                font-size: 40px;
+            }
+            
+            .contact-form {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .section-title h2 {
+                font-size: 32px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 16px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader - 3 sekundlik kirish effekti -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+        </div>
+        <div class="preloader-text">Premium</div>
+        <div class="preloader-progress">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Asosiy kontent -->
+    <div class="page-content">
+        <!-- Header -->
+        <header id="header">
+            <div class="container">
+                <nav>
+                    <a href="#" class="logo"><i class="fas fa-crown"></i>Premium</a>
+                    
+                    <ul class="nav-links">
+                        <li><a href="#home" class="active">Bosh Sahifa</a></li>
+                        <li><a href="#features">Xususiyatlar</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#contact">Bog'lanish</a></li>
+                    </ul>
+                    
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="floating-elements">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Zamonaviy Veb-sayt <br> <span style="background:var(--gradient-accent); -webkit-background-clip:text; background-clip:text; color:transparent;"></span></h1>
+                    <p>Bizning zamonaviy veb-saytlar bilan biznesingizni yangi bosqichga olib chiqing.</p>
+                    <a href="#contact" class="btn">Loyihani Boshlash <i class="fas fa-arrow-right"></i></a>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="150">0</div>
+                            <div class="stat-text">Bajarilgan Loyihalar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="98">0</div>
+                            <div class="stat-text">Mamnun Mijozlar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="5">0</div>
+                            <div class="stat-text">Yillik Tajriba</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-title animate-on-scroll">
+                    <h2>Bizning Afzalliklarimiz</h2>
+                    <p>Zamonaviy texnologiyalar va innovatsion yondashuvlar bilan veb-saytingizni eng yuqori darajada ishlab chiqamiz</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Tezkor Yuklanish</h3>
+                        <p>Maxsus optimallashtirilgan kod va server sozlamalari bilan saytingiz bir soniyadan kam vaqtda yuklanadi.</p>
+                    </div>
+                    
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobil Optimallashtirish</h3>
+                        <p>Barcha qurilmalar uchun mukammal moslashuvchan dizayn. Har qanday ekran o'lchamida ajoyib ko'rinish.</p>
+                    </div>
+                    
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>SEO Optimallashtirish</h3>
+                        <p>Google va boshqa qidiruv tizimlarida yuqori o'rinlar uchun to'liq SEO optimallashtirish.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section class="portfolio" id="portfolio">
+            <div class="container">
+                <div class="section-title animate-on-scroll">
+                    <h2>Bizning Portfolio</h2>
+                    <p>So'nggi va eng yaxshi ishlarimiz bilan tanishib chiqing. Har bir loyiha mijozning ehtiyojlariga mos holda ishlab chiqilgan.</p>
+                </div>
+                
+                <div class="portfolio-filter animate-on-scroll">
+                    <button class="filter-btn active" data-filter="all">Hammasi</button>
+                    <button class="filter-btn" data-filter="web">Veb-saytlar</button>
+                    <button class="filter-btn" data-filter="app">Ilovalar</button>
+                    <button class="filter-btn" data-filter="design">Dizayn</button>
+                </div>
+                
+                <div class="portfolio-grid">
+                    <div class="portfolio-item animate-on-scroll visible" data-category="web">
+                        <div class="portfolio-img">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Online Do'kon Platformasi</h3>
+                            <p>To'liq funksional elektron savdo sayti. Mahsulotlar katalogi, to'lov tizimi va mijozlar boshqaruvi.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item animate-on-scroll visible" data-category="app">
+                        <div class="portfolio-img">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Mobil Ilova</h3>
+                            <p>iOS va Android uchun zamonaviy mobil ilova. Foydalanuvchilar uchun qulay interfeys va tezkor ishlash.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="portfolio-item animate-on-scroll visible" data-category="design">
+                        <div class="portfolio-img">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Korporativ Dizayn</h3>
+                            <p>Yirik kompaniya uchun to'liq korporativ identifikatsiya va brending loyihasi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-title animate-on-scroll">
+                    <h2>Bog'laning</h2>
+                    <p>Loyihangiz haqida gaplashish uchun quyidagi formani to'ldiring yoki bevosita biz bilan bog'laning</p>
+                </div>
+                
+                <div class="contact-wrapper">
+                    <div class="contact-info animate-on-scroll">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Manzil</h4>
+                                <p>Toshkent shahar, Yunusobod tumani</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Telefon</h4>
+                                <p>+998 90 123 45 67</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Elektron Pochta</h4>
+                                <p>info@premium.uz</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form animate-on-scroll">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="name" placeholder="Ismingiz" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="email" placeholder="Elektron pochta" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="subject" placeholder="Mavzu" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea class="form-control" id="message" placeholder="Xabaringiz..." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn">Xabarni Yuborish <i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                  <div class="footer-about">
+                    <div class="footer-logo">
+                      <i class="fas fa-crown"></i> Premium
+                    </div>
+              
+                    <p>
+                      Biz sizga eng zamonaviy veb-echimlarni taklif qilamiz.
+                      Sizning biznesingizni raqamli olamda yangi bosqichga olib chiqamiz.
+                    </p>
+              
+                    <div class="social-icons">
+                      <a href="#"><i class="fab fa-telegram"></i></a>
+                      <a href="#"><i class="fab fa-instagram"></i></a>
+                      <a href="#"><i class="fab fa-facebook"></i></a>
+                      <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="footer-links">
+                <h3>Tezkor Havolalar</h3>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i> Bosh Sahifa</a></li>
+                    <li><a href="#features"><i class="fas fa-chevron-right"></i> Xususiyatlar</a></li>
+                    <li><a href="#portfolio"><i class="fas fa-chevron-right"></i> Portfolio</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Bog'lanish</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h3>Aloqa Ma'lumotlari</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Toshkent shahar, Yunusobod tumani</p>
+                <p><i class="fas fa-phone-alt"></i> +998 90 123 45 67</p>
+                <p><i class="fas fa-envelope"></i> info@premium.uz</p>
+                <p><i class="fas fa-clock"></i> Dushanba - Juma: 9:00 - 18:00</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2024 Premium Sayt. Barcha huquqlar himoyalangan. | <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none;">Maxfiylik siyosati</a></p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script>
+// Preloader - 3 sekundlik kirish effekti
+const preloader = document.getElementById('preloader');
+const progressBar = document.querySelector('.progress-bar');
+const pageContent = document.querySelector('.page-content');
+
+// Progress bar animatsiyasi
+setTimeout(() => {
+    progressBar.style.width = '100%';
+}, 100);
+
+// Preloader ni 3 sekunddan keyin o'chirish
+setTimeout(() => {
+    preloader.classList.add('hidden');
+    
+    // Preloader o'chgandan keyin scroll ni yoqish
+    document.body.style.overflow = 'auto';
+}, 3000);
+
+// Boshlanishda scroll ni o'chirish
+document.body.style.overflow = 'hidden';
+
+// Mobile menu toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+        ? '<i class="fas fa-times"></i>' 
+        : '<i class="fas fa-bars"></i>';
+});
+
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    });
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if(targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if(targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Header scroll effect
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if(window.scrollY > 100) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+    
+    // Active nav linkni aniqlash
+    const sections = document.querySelectorAll('section');
+    const navLinksAll = document.querySelectorAll('.nav-links a');
+    
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if(scrollY >= (sectionTop - 200)) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinksAll.forEach(link => {
+        link.classList.remove('active');
+        if(link.getAttribute('href').substring(1) === current) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Statistikani hisoblash animatsiyasi
+function animateCounters() {
+    const counters = document.querySelectorAll('.stat-number');
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-count');
+        const increment = target / 100;
+        let current = 0;
+        
+        const updateCounter = () => {
+            if(current < target) {
+                current += increment;
+                counter.innerText = Math.ceil(current);
+                setTimeout(updateCounter, 20);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        
+        updateCounter();
+    });
+}
+
+// Scroll animatsiyalari
+function checkScroll() {
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if(elementTop < windowHeight - 100) {
+            element.classList.add('visible');
+            
+            // Agar element stat-numbers bo'lsa, animatsiyani ishga tushir
+            if(element.querySelector('.stat-number')) {
+                animateCounters();
+            }
+        }
+    });
+}
+
+// Portfolio filter
+const filterButtons = document.querySelectorAll('.filter-btn');
+const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Active classni o'zgartirish
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Filtr qo'llash
+        const filter = button.getAttribute('data-filter');
+        
+        portfolioItems.forEach(item => {
+            const category = item.getAttribute('data-category');
+            
+            if(filter === 'all' || filter === category) {
+                item.style.display = 'block';
+                setTimeout(() => {
+                    item.classList.add('visible');
+                }, 100);
+            } else {
+                item.classList.remove('visible');
+                setTimeout(() => {
+                    item.style.display = 'none';
+                }, 400);
+            }
+        });
+    });
+});
+
+// Form submission
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    // Modal yoki xabar ko'rsatish (oddiy alert o'rniga chiroyli modal)
+    const modalHTML = `
+        <div id="successModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:9999;">
+            <div style="background:white; padding:40px; border-radius:25px; max-width:500px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+                <div style="width:80px; height:80px; background:var(--gradient); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:40px; margin:0 auto 20px;">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 style="margin-bottom:15px; color:var(--dark); font-size:28px;">Xabar Yuborildi!</h3>
+                <p style="margin-bottom:25px; color:#666;">Rahmat, <strong>${name}</strong>! Xabaringiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+                <button id="closeModal" style="background:var(--gradient); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:600; cursor:pointer; font-size:16px;">OK</button>
+            </div>
+        </div>
+    `;
+    
+    // Modalni qo'shish
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Modalni yopish
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('successModal').remove();
+    });
+    
+    // Modalni backgroundga bosganda ham yopish
+    document.getElementById('successModal').addEventListener('click', (e) => {
+        if(e.target.id === 'successModal') {
+            document.getElementById('successModal').remove();
+        }
+    });
+    
+    // Reset form
+    contactForm.reset();
+});
+
+// Scroll event listener
+window.addEventListener('scroll', checkScroll);
+window.addEventListener('load', checkScroll);
+
+// Sayt yuklanganda statistikani ishga tushirish
+setTimeout(() => {
+    animateCounters();
+}, 3500);
+
+// Sayt yuklanganda qo'shimcha effektlar
+window.addEventListener('load', () => {
+    // Cursor effekti qo'shish
+    document.addEventListener('mousemove', (e) => {
+        const cursor = document.querySelector('.cursor');
+        if(!cursor) {
+            // Cursor yaratish
+            const cursorEl = document.createElement('div');
+            cursorEl.className = 'cursor';
+            cursorEl.style.cssText = `
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                border: 2px solid var(--primary);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -50%);
+                transition: width 0.2s, height 0.2s, background 0.2s;
+            `;
+            document.body.appendChild(cursorEl);
+            
+            // Kichik cursor
+            const cursor2 = document.createElement('div');
+            cursor2.className = 'cursor2';
+            cursor2.style.cssText = `
+                position: fixed;
+                width: 6px;
+                height: 6px;
+                background: var(--primary);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -50%);
+                transition: width 0.1s, height 0.1s;
+            `;
+            document.body.appendChild(cursor2);
+        }
+        
+        // Cursor pozitsiyasini yangilash
+        const cursor1 = document.querySelector('.cursor');
+        const cursor2 = document.querySelector('.cursor2');
+        cursor1.style.left = e.clientX + 'px';
+        cursor1.style.top = e.clientY + 'px';
+        cursor2.style.left = e.clientX + 'px';
+        cursor2.style.top = e.clientY + 'px';
+        
+        // Element ustiga borilganda kattalashishi
+        if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+            cursor.style.width = '40px';
+            cursor.style.height = '40px';
+            cursor.style.background = 'rgba(108, 99, 255, 0.1)';
+        } else {
+            cursor.style.width = '20px';
+            cursor.style.height = '20px';
+            cursor.style.background = 'transparent';
+        }
+    });
+    
+    // Sayt yuklanganda konfetcha animatsiyasi
+    setTimeout(() => {
+        createConfetti();
+    }, 3200);
+});
+
+// Konfetcha animatsiyasi funktsiyasi
+function createConfetti() {
+    const colors = ['#6C63FF', '#4A44C6', '#FF6584', '#FF3366', '#36D1DC', '#5B86E5'];
+    const confettiCount = 100;
+    
+    for(let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.cssText = `
+            position: fixed;
+            width: ${Math.random() * 10 + 5}px;
+            height: ${Math.random() * 10 + 5}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            top: -20px;
+            left: ${Math.random() * 100}vw;
+            border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+            opacity: 0.8;
+            z-index: 9998;
+            pointer-events: none;
+        `;
+        
+        document.body.appendChild(confetti);
+        
+        // Animatsiya
+        const animation = confetti.animate([
+            { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+            { transform: `translateY(${window.innerHeight + 20}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], {
+            duration: Math.random() * 3000 + 2000,
+            easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+        });
+        
+        // Animatsiya tugagach elementni olib tashlash
+        animation.onfinish = () => {
+            confetti.remove();
+        };
+    }
+}
+
+// Sayt yuklanganda audio effekt (ixtiyoriy)
+setTimeout(() => {
+    // Oddiy audio effekt (agar kerak bo'lsa)
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 523.25; // C5 note
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 1);
+    } catch (e) {
+        console.log("Audio effekt ishlamadi, lekin bu muhim emas");
+    }
+}, 3000);
+</script>
